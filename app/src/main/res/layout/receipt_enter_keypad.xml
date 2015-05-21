@@ -1,115 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <GridLayout
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
         android:orientation="vertical">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1"
-            android:onClick="keyButtonOne"
-            android:id="@+id/keyButton1"
-            android:layout_row="1"
-            android:layout_column="0" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2"
-            android:onClick="keyButtonTwo"
-            android:id="@+id/keyButton2"
-            android:layout_row="1"
-            android:layout_column="1" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4"
-            android:onClick="keyButtonFour"
-            android:id="@+id/keyButton4"
-            android:layout_row="2"
-            android:layout_column="0" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5"
-            android:onClick="keyButtonFive"
-            android:id="@+id/keyButton5"
-            android:layout_row="2"
-            android:layout_column="1" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="6"
-            android:onClick="keyButtonSix"
-            android:id="@+id/keyButton6"
-            android:layout_row="2"
-            android:layout_column="2" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="7"
-            android:onClick="keyButtonSeven"
-            android:id="@+id/keyButton7"
-            android:layout_row="3"
-            android:layout_column="0" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="8"
-            android:onClick="keyButtonEight"
-            android:id="@+id/keyButton8"
-            android:layout_row="3"
-            android:layout_column="1" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="9"
-            android:onClick="keyButtonNine"
-            android:id="@+id/keyButton9"
-            android:layout_row="3"
-            android:layout_column="2" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:onClick="keyButtonZero"
-            android:id="@+id/keyButton0"
-            android:layout_row="4"
-            android:layout_column="0" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="."
-            android:onClick="keyButtonDot"
-            android:id="@+id/keyButtonDot"
-            android:layout_row="4"
-            android:layout_column="2" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="3"
-        android:id="@+id/keyButton3"
-        android:layout_row="1"
-        android:layout_column="2" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/keypadValue"
-        android:layout_row="0"
-        android:layout_column="1" />
+    <TextView
+        android:layout_width="276dp"
+        android:layout_height="45dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/keypadText"
+        android:autoText="false"
+        android:editable="true"
 
 
-    </GridLayout>
+        android:hint="$00.00"
+        android:phoneNumber="false"
+        android:inputType="phone|numberDecimal"
+        android:gravity="left"
+        android:enabled="true"
+        android:focusableInTouchMode="true" />
+</LinearLayout>
 
