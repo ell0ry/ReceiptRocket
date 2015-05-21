@@ -32,6 +32,7 @@ import java.util.Calendar;
 public class AddReceiptPage extends Activity {
 
     private double receiptValue;
+    TextView valueDisplay;
 
 
     @Override
@@ -39,33 +40,33 @@ public class AddReceiptPage extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_receipt_page);
         receiptValue = 00.00;
+        valueDisplay = (TextView) findViewById(R.id.valueDisplay);
     }
 
 
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         getDialogEnteredValue();
-
-
     }
 
-    public void updateValue(View view){
+    public void updateValue(View view) {
         getDialogEnteredValue();
     }
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void getDialogEnteredValue(){
+    public void getDialogEnteredValue() {
 
 
-        final AlertDialog.Builder keypadBuilder = new  AlertDialog.Builder(this);
+        final AlertDialog.Builder keypadBuilder = new AlertDialog.Builder(this);
         keypadBuilder.setCancelable(true);
 
 
         LayoutInflater factory = LayoutInflater.from(AddReceiptPage.this);
         View dialogContent = factory.inflate(R.layout.receipt_enter_keypad, null);
 
-        final EditText keypadValue = (EditText)dialogContent.findViewById(R.id.keypadText);
+        final EditText keypadValue = (EditText) dialogContent.findViewById(R.id.keypadText);
+
         keypadValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -111,8 +112,10 @@ public class AddReceiptPage extends Activity {
         keypadBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 //Dialog d = (Dialog) dialog;
-                if(keypadValue.getText().toString().length() > 0) {
-                    receiptValue = Double.parseDouble(keypadValue.getText().toString().substring(1));
+                if (!keypadValue.getText().toString().equals("$00.00")) {
+                    receiptValue = Double.parseDouble(keypadValue.getText().toString().replaceAll("[$,]", ""));
+                    Log.d("AddReceiptPage", "Received double value of " + receiptValue);
+                    valueDisplay.setText(keypadValue.getText().toString());
                 }
                 dialog.cancel();
             }
@@ -132,12 +135,10 @@ public class AddReceiptPage extends Activity {
         return true;
     }
 
-    public void receiptComplete(View view){
-        Calendar cal =  Calendar.getInstance();
-        EditText value = (EditText)findViewById(R.id.receiptValue);
-        double enteredValue = Double.parseDouble( value.getText().toString());
+    public void receiptComplete(View view) {
+        Calendar cal = Calendar.getInstance();
         Intent intent = new Intent();
-        intent.putExtra("enteredReceiptValue", enteredValue);
+        intent.putExtra("enteredReceiptValue", receiptValue);
         setResult(RESULT_OK, intent);
         finish();
     }
