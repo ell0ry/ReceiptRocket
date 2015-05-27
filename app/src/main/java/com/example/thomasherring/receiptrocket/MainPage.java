@@ -3,33 +3,31 @@ package com.example.thomasherring.receiptrocket;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import objects.Receipt;
-import objects.listObjects.ReceiptList;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import objects.Receipt;
+import objects.ReceiptList;
+
 
 public class MainPage extends Activity {
 
-    public final int NUM_PAST_RECEIPTS = 10;
+    private final int NUM_PAST_RECEIPTS = 10;
+    private final String SAVE_NAME = "mainList";
 
-
-    ArrayList<Receipt> pastReceipts;
-    ArrayList<String> pastReceiptsString;
-    ListView listView;
-    ArrayAdapter<String> arrayAdapter;
-    Calendar currentCal;
+    private ArrayList<Receipt> pastReceipts;
+    private ArrayList<String> pastReceiptsString;
+    private ListView listView;
+    private ArrayAdapter<String> arrayAdapter;
+    private Calendar currentCal;
+    private ReceiptList mainList;
 
 
     @Override
@@ -41,22 +39,28 @@ public class MainPage extends Activity {
 
         //Init main list
         currentCal = Calendar.getInstance();
-        ReceiptList.addYearIf(currentCal.get(Calendar.YEAR));
+
+
+        //Load mainList
+        ReceiptList.loadList(this.getApplicationContext());
 
         //Init Lists
-        pastReceipts = new ArrayList<Receipt>();
-
-        //Setup list
         listView = (ListView) findViewById(R.id.listView);
+        updateListView();
 
-        //Change in future to display the proper information about the list
-        pastReceiptsString = convertToStringArray(pastReceipts);
-        arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                pastReceiptsString);
-
-        listView.setAdapter(arrayAdapter);
+//        pastReceipts = new ArrayList<Receipt>();
+//
+//        //Setup list
+//        listView = (ListView) findViewById(R.id.listView);
+//
+//        //Change in future to display the proper information about the list
+//        pastReceiptsString = convertToStringArray(pastReceipts);
+//        arrayAdapter = new ArrayAdapter<String>(
+//                this,
+//                android.R.layout.simple_list_item_1,
+//                pastReceiptsString);
+//
+//        listView.setAdapter(arrayAdapter);
 
     }
 
@@ -69,25 +73,20 @@ public class MainPage extends Activity {
 
     }
 
+    protected void onDestroy() {
+        super.onDestroy();
+        ReceiptList.saveList(this.getApplicationContext());
+
+    }
 
     private void updateListView() {
 
         pastReceipts = new ArrayList<Receipt>();
+        int mainListSize = ReceiptList.getReceiptListSize();
 
         //Search for the most recent NUM_PAST_RECEIPTS amount of receipts to display
-        for (int m = currentCal.get(Calendar.MONTH); m >= 0; m--) {
-            for (int d = currentCal.get(Calendar.DAY_OF_MONTH); d > 0; d--) {
-
-                if (ReceiptList.hasReceipts(currentCal.get(Calendar.YEAR), m, d)) {
-
-                    for (int i = ReceiptList.getReceiptListSize(currentCal.get(Calendar.YEAR), m, d) - 1; i >= 0; i--) {
-                        if (pastReceipts.size() < NUM_PAST_RECEIPTS) {
-                            pastReceipts.add(ReceiptList.getReceipt(currentCal.get(Calendar.YEAR), m, d, i));
-                        }
-                    }
-
-                }
-            }
+        for (int i = mainListSize - 1; pastReceipts.size() < 10 && i >= 0; i--) {
+            pastReceipts.add(ReceiptList.getReceipt(i));
         }
 
         pastReceiptsString = convertToStringArray(pastReceipts);
@@ -132,8 +131,10 @@ public class MainPage extends Activity {
             double val = data.getDoubleExtra("enteredReceiptValue", 0);
             //Adds receipt for current day
             ReceiptList.addReceipt(currentCal.get(Calendar.YEAR), currentCal.get(Calendar.MONTH), currentCal.get(Calendar.DAY_OF_MONTH),
-                    new Receipt(val));
+                    val);
+
             updateListView();
+            ReceiptList.saveList(this.getApplicationContext());
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

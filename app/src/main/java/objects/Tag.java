@@ -1,21 +1,24 @@
 package objects;
 
+import java.io.IOException;
+import java.io.Serializable;
+
 /**
  * Created by ThomasHerring on 2015-05-02.
  */
-public class Tag {
+public class Tag implements Serializable {
 
     String name;
-    String c;
+    String color;
 
-    public Tag(String n, String color) {
-        this.c = color;
-        name = n;
+    public Tag(String name, String color) {
+        this.color = color;
+        this.name = name;
     }
 
-    public Tag(String n) {
-        name = n;
-        c = chooseRandomColor();
+    public Tag(String name) {
+        this.name = name;
+        color = chooseRandomColor();
     }
 
     private static String chooseRandomColor() {
@@ -56,6 +59,19 @@ public class Tag {
         }
         return ranColor;
 
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out)
+            throws IOException {
+        out.writeChars(name);
+        out.writeChars(color);
+    }
+
+    private void readObject(java.io.ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        //Check if this is the right input method for the name and color
+        name = (String) in.readObject();
+        color = (String) in.readObject();
     }
 
 }
